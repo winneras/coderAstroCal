@@ -64,6 +64,25 @@ function random(dayseed, indexseed) {
     }
     return n;
 }
+/*
+* dayseed as same as random
+* astro is the index in array astros[]
+* type is the number code for 脑力指数和体力指数
+ */
+function randomAstro(dayseed,astro,type){ 
+    var m = Math.pow(10,(astro % 4) + 5);
+    var a = dayseed % m;
+    while(a * 10 + 1 >= m - 1){
+        a = (a / 20) * 10 +1;
+        a = parseInt(a);
+    }
+    var n = a;
+    var b = type * astro * 2 + 1;
+    for (var i = 0; i < 50 + b; i++){
+        n = (a * n + b) % m;
+    }
+    return n;
+}
 
 var today = new Date();
 var iday = today.getFullYear() * 10000 + (today.getMonth() + 1) * 100 + today.getDate();
