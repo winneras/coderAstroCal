@@ -29,39 +29,45 @@
     </head>
     <body>
         <div class="app">
+            <div id="header" class="clear">
+                <h1 class="title">
+                    程序员老黄历<sup>beta</sup>
+                </h1>
 
-            <h1 class="title">
-                程序员老黄历<sup>beta</sup>
-            </h1>
-            <div class="date"></div>
-            <div class="astro"></div>
-            <div class="good">
-                <h2>宜</h2>
-            
-            <div class="content">
-                <ul></ul>
+                <div class="date float"></div>
+                <div class="astro float"></div>
             </div>
-            <div class="clear"></div>
-            </div>
-            <div class="split"></div>
-            
-            <div class="bad">
-                <h2>不宜</h2>
+            <div id="lucky" class="clear">
+                <div class="good float">
+                    <h2>宜</h2>
 
-                <div class="content">
-                    <ul></ul>
+                    <div class="content">
+                        <ul></ul>
+                    </div>
+                    <div class="clear"></div>
                 </div>
-                
+
+
+                <div class="bad float">
+                    <h2>不宜</h2>
+
+                    <div class="content">
+                        <ul></ul>
+                    </div>
+
+                    <div class="clear"></div>
+                </div>
                 <div class="clear"></div>
             </div>
-            <div class="split"></div>
-            <div class="line-tip">
-                <strong>座位朝向：</strong>面向<span class="direction_value"></span>写程序，BUG 最少。
-            </div>
-            <div class="line-tip">
-                <strong>今日宜饮：</strong><span class="drink_value"></span>
-            </div>
 
+            <div id="better" class="clear">
+                <div class="line-tip">
+                    <strong>座位朝向：</strong>面向<span class="direction_value"></span>写程序，BUG 最少。
+                </div>
+                <div class="line-tip">
+                    <strong>今日宜饮：</strong><span class="drink_value"></span>
+                </div>
+            </div>
             <div class="comment">
                 <ul>
                     <li>本老黄历尚处于beta阶段，作者随时会修改，所以如果上午看到的内容跟下午不同，请勿惊慌；</li>
