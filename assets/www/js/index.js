@@ -78,7 +78,7 @@ function randomAstro(dayseed,astro,type){
     }
     var n = a;
     var b = type * astro * 2 + 1;
-    for (var i = 0; i < 50 + b; i++){
+    for (var i = 0; i < 9 * b; i++){
         n = (a * n + b) % m;
     }
     return n;
