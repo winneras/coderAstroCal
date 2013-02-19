@@ -415,7 +415,7 @@ function addToBad(event) {
 
 $(function(){
     $('.date').html(getTodayString());
-    db.transaction(initDB, errorCB, successCB);
+    //db.transaction(initDB, errorCB, successCB);
     $('.astro').html(astros[myAstro] + '今日脑力指数：' + astroIndex[0] + '/5 今日体力指数：' + astroIndex[1] + '/5');
     $('.direction_value').html(directions[random(iday, 2) % directions.length]);
     $('.drink_value').html(drinks[random(iday, 5) % drinks.length]);
