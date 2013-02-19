@@ -283,6 +283,24 @@ var drinks = ["水","红茶","绿茶","咖啡","奶茶","可乐","牛奶","豆�
 
 var astros = ["魔羯座","水瓶座","双鱼座","牡羊座","金牛座","双子座","巨蟹座","狮子座","处女座","天秤座","天蝎座","射手座"];
 
+var myAstro = 9;
+
+var astroIndex = pickAstroIndex(myAstro);
+
+/*var db = window.openDatabase("userAstro", "1.0", "User Astro", 512);
+
+function initDB(tx) {
+     tx.executeSql('CREATE TABLE IF NOT EXISTS USER_ASTRO (id unique, data)');
+     tx.executeSql('INSERT INTO USER_ASTRO (id, data) VALUES (1, 7)');
+}
+function errorCB(err) {
+    alert("Error processing SQL: "+err.code);
+}
+
+function successCB() {
+    alert("success!");
+}*/
+
 function getTodayString() {
     return "今天是" + today.getFullYear() + "年" + (today.getMonth() + 1) + "月" + today.getDate() + "日 星期" + weeks[today.getDay()];
 }
@@ -307,6 +325,16 @@ function pickTodaysLuck() {
     }
 	
 	
+}
+
+//Astro index for today
+function pickAstroIndex(astro){ //astro is a number refer to the output of getAstro()
+    var result = [];
+    result[0] = randomAstro(iday,astro,11) % 10;
+    result[1] = randomAstro(iday,astro,4) % 10;
+    if(result[0] > 5){ result[0] = 5; }
+    if(result[1] > 5){ result[1] =5 ; }
+    return result;
 }
 
 // 添加预定义事件
@@ -387,7 +415,8 @@ function addToBad(event) {
 
 $(function(){
     $('.date').html(getTodayString());
-    $('.astro').html(astros[getAstro(today.getMonth() + 1,today.getDate())]);
+    db.transaction(initDB, errorCB, successCB);
+    $('.astro').html(astros[myAstro] + '今日脑力指数：' + astroIndex[0] + '/5 今日体力指数：' + astroIndex[1] + '/5');
     $('.direction_value').html(directions[random(iday, 2) % directions.length]);
     $('.drink_value').html(drinks[random(iday, 5) % drinks.length]);
     pickTodaysLuck();
