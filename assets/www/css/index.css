@@ -52,7 +52,18 @@ body {
 
 /* Landscape layout (with min-width) */
 @media screen and (min-aspect-ratio: 1/1) and (min-width:600px) {
-
+    .float {
+        float: left;
+        
+    }
+    #lucky .good, #lucky .bad{
+        width: 280px;
+        margin: 5px;
+    }
+    #lucky {
+        width: 600px;
+        margin: 0 auto;
+    }
 }
 
 body * {
@@ -107,4 +118,7 @@ h2{
 }
 .bad h2{
     background: #000;
+}
+li .name{
+    font-weight: bolder;
 }

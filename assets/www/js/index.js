@@ -331,10 +331,10 @@ function pickAstroIndex(astro){ //astro is a number refer to the output of getAs
     result[0] = randomAstro(iday,astro,11) % 10;
     result[1] = randomAstro(iday,astro,4) % 10;
     if(result[0] > 5){
-        result[0] = 5;
+        result[2] = 5;
     }
     if(result[1] > 5){
-        result[1] =5 ;
+        result[3] =5 ;
     }
     return result;
 }
@@ -430,7 +430,7 @@ $(function(){
     }else{
         myAstro = window.localStorage.getItem("userAstro");
         var astroIndex = pickAstroIndex(myAstro);
-        $('.astro').html(astros[myAstro] + '今日脑力指数：' + astroIndex[0] + '/5 今日体力指数：' + astroIndex[1] + '/5');
+        $('.astro').html(astros[myAstro] + '今日脑力指数：' + astroIndex[0] + '/5 今日幸运指数：' + astroIndex[1] + '/5');
     }
     
     
@@ -438,3 +438,161 @@ $(function(){
     $('.drink_value').html(drinks[random(iday, 5) % drinks.length]);
     pickTodaysLuck();
 });
+
+/*
+ *a为astroIndex[2]脑力指数实际值，b为astroIndex[3]幸运指数实际值
+ *--------a+b>=10----------
+ *case a + b >=18 & |a - b| <=1 牛逼的人生不需要解释，今天你所向无敌。唯一要注意的是对待与你一样强势的同事，选择与他们合作会开创你一生的霸业。
+ *case 18>a+b>=12 & a>5 & b>5 今天你的状态极佳，任何技术问题都不在话下，但是请留意身边的小人，虽然今天的你不会被抓到任何把柄，但是太招摇会引来妒忌。
+ *case 12>a+b>=10 & a>4 & b>4 对你来说今天会是精彩的一天！工作对你来说是轻松加愉快，是时候考虑一下关心一下你的TA了,今天表白或者求婚都会有好运哦！
+ *case other 使用index[0]和[1]查询good 和 bad
+ *--------end a+b>=10------
+ *
+ *-----------2<a+b<10-----------
+ *使用index查询good 和 bad
+ *数值大于5取2个good，3~4取1个坏1个好，0~2取2坏
+ *所有的再随机取0或1个，good or bad
+ *-------end 2<a+b<10-----------
+ *
+ *----------a+b<=2------------
+ *case a+b=0 嗯！如果你信我的话今天最好不要出门，当然我说的也不一定准...
+ *case a+b=1 你今天不在工作状态，可以的话少写代码吧！
+ *case a+b=2 今天不要勉强自己，累了就赶快去休息。
+ **/
+
+var brain = [
+{
+    name:"写单元测试", 
+    good:"写单元测试将减少出错",
+    bad:"写单元测试会降低你的开发效率"
+},
+
+{
+    name:"白天上线", 
+    good:"今天白天上线是安全的",
+    bad:"可能导致灾难性后果"
+},
+
+{
+    name:"重构", 
+    good:"代码质量得到提高",
+    bad:"你很有可能会陷入泥潭"
+},
+
+{
+    name:"晚上加班", 
+    good:"晚上是程序员精神最好的时候",
+    bad:""
+},
+
+{
+    name:"写超过%l行的方法", 
+    good:"你的代码组织的很好，长一点没关系",
+    bad:"你的代码将混乱不堪，你自己都看不懂"
+},
+
+{
+    name:"提交代码", 
+    good:"遇到冲突的几率是最低的",
+    bad:"你遇到的一大堆冲突会让你觉得自己是不是时间穿越了"
+},
+
+{
+    name:"晚上上线", 
+    good:"晚上是程序员精神最好的时候",
+    bad:"你白天已经筋疲力尽了"
+},
+
+{
+    name:"修复BUG", 
+    good:"你今天对BUG的嗅觉大大提高",
+    bad:"新产生的BUG将比修复的更多"
+}];
+
+
+var luck = [
+
+{
+    name:"跳槽", 
+    good:"该放手时就放手",
+    bad:"鉴于当前的经济形势，你的下一份工作未必比现在强"
+},
+
+{
+    name:"招人", 
+    good:"你遇到千里马的可能性大大增加",
+    bad:"你只会招到一两个混饭吃的外行"
+},
+
+{
+    name:"面试", 
+    good:"面试官今天心情很好",
+    bad:"面试官不爽，会拿你出气"
+},
+
+{
+    name:"提交辞职申请", 
+    good:"公司找到了一个比你更能干更便宜的家伙，巴不得你赶快滚蛋",
+    bad:"鉴于当前的经济形势，你的下一份工作未必比现在强"
+},
+
+{
+    name:"申请加薪", 
+    good:"老板今天心情很好",
+    bad:"公司正在考虑裁员"
+},
+
+{
+    name:"在妹子面前吹牛", 
+    good:"改善你矮穷挫的形象",
+    bad:"会被识破"
+},
+
+{
+    name:"命名变量\"%v\"", 
+    good:"",
+    bad:""
+},
+
+{
+    name:"代码复审", 
+    good:"发现重要问题的几率大大增加",
+    bad:"你什么问题都发现不了，白白浪费时间"
+},
+
+{
+    name:"开会", 
+    good:"写代码之余放松一下打个盹，有益健康",
+    bad:"你会被扣屎盆子背黑锅"
+},
+
+{
+    name:"打DOTA", 
+    good:"你将有如神助",
+    bad:"你会被虐的很惨"
+},
+
+{
+    name:"设计评审", 
+    good:"设计评审会议将变成头脑风暴",
+    bad:"人人筋疲力尽，评审就这么过了"
+},
+
+{
+    name:"需求评审", 
+    good:"",
+    bad:""
+},
+
+{
+    name:"上微博", 
+    good:"今天发生的事不能错过",
+    bad:"会被老板看到"
+},
+
+{
+    name:"上AB站", 
+    good:"还需要理由吗？",
+    bad:"会被老板看到"
+}
+];
