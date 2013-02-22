@@ -99,7 +99,7 @@ var brain = [
 
 {
     name:"白天上线", 
-    good:"今天白天是个好日子",
+    good:"所有工作都很顺利",
     bad:"这可能导致灾难性后果"
 },
 
@@ -187,8 +187,8 @@ var luck = [
 
 {
     name:"命名变量\"%v\"", 
-    good:"",
-    bad:""
+    good:"这会给你带来好运",
+    bad:"你的运气都会被带走"
 },
 
 {
@@ -217,8 +217,8 @@ var luck = [
 
 {
     name:"需求评审", 
-    good:"",
-    bad:""
+    good:"参与评审的人都很给力",
+    bad:"你会遇到一群冬瓜"
 },
 
 {
@@ -283,7 +283,7 @@ function getAstro(m,d){   //有用说法现在应该用"102123444543"
 
 // 生成今日运势
 function pickTodaysBrain(index) {
-    var eventArr = pickRandom(4,brain);
+    var eventArr = pickRandom(index+2,brain);
     if(index>=5){
         for (var i = 0; i < 2; i++) {
             addToGood(eventArr[i]);
@@ -296,7 +296,7 @@ function pickTodaysBrain(index) {
             addToBad(eventArr[i]);
         }
     }
-    var n = random(iday+6,91) % 4;
+    var n = random(iday+6,47) % 4;
     switch (n){
         case 0:
             break;
@@ -312,7 +312,7 @@ function pickTodaysBrain(index) {
 	
 }
 function pickTodaysLuck(index) {
-    var eventArr = pickRandom(4,luck);
+    var eventArr = pickRandom(index+2,luck);
     if(index>=5){
         for (var i = 0; i < 2; i++) {
             addToGood(eventArr[i]);
@@ -441,9 +441,11 @@ $(function(){
     if (!window.localStorage.getItem("userAstro")){
         $('#astros').html(showAstros());
         $('ul#astros li a').click( function(){
+            clearContent();
             myAstro = $(this).data('astro');
             var astroIndex = pickAstroIndex(myAstro);
-            $('.astro').html(astros[myAstro] + '今日脑力指数：' + astroIndex[2] + '/5 今日体力指数：' + astroIndex[3] + '/5');
+            $('.astro').html(astros[myAstro] + '今日脑力指数：' + astroIndex[2] + '/5 今日幸运指数：' + astroIndex[3] + '/5');
+            createAstroLuck();
             window.localStorage.setItem("userAstro", myAstro);
         });
         
@@ -451,15 +453,22 @@ $(function(){
         myAstro = window.localStorage.getItem("userAstro");
         var astroIndex = pickAstroIndex(myAstro);
         $('.astro').html(astros[myAstro] + '今日脑力指数：' + astroIndex[2] + '/5 今日幸运指数：' + astroIndex[3] + '/5');
+        createAstroLuck();
     }
     
     
     $('.direction_value').html(directions[random(iday, 2) % directions.length]);
     $('.drink_value').html(drinks[random(iday, 5) % drinks.length]);
-    //pickTodaysLuck();
-    createAstroLuck();
+//pickTodaysLuck();
+    
 });
 
+function clearContent(){
+    $('.good').empty();
+    $('.bad').empty();
+    $('.best').empty();
+    $('.worst').empty();
+}
 
 function createAstroLuck(){
     var astroIndex = pickAstroIndex(myAstro);
@@ -489,7 +498,7 @@ function createAstroLuck(){
         else if(a+b==1){
             $('.worst').html('你今天不在工作状态，可以的话少写代码吧！');
         }
-        else{
+        else if(a+b==0){
             $('.worst').html('嗯！如果你信我的话今天最好不要出门，当然我说的也不一定准...');
         }
     }
