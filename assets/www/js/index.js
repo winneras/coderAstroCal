@@ -258,7 +258,7 @@ var drinks = ["水","红茶","绿茶","咖啡","奶茶","可乐","牛奶","豆�
 
 var astros = ["魔羯座","水瓶座","双鱼座","牡羊座","金牛座","双子座","巨蟹座","狮子座","处女座","天秤座","天蝎座","射手座"];
 
-var myAstro = 7;
+var myAstro;
 
 
 
@@ -282,21 +282,62 @@ function getAstro(m,d){   //有用说法现在应该用"102123444543"
 }
 
 // 生成今日运势
-function pickTodaysLuck() {
-    var numGood = random(iday, 98) % 3 + 2;
-    var numBad = random(iday, 87) % 3 + 2;
-    var eventArr = pickRandom(numGood + numBad);
-	
-    var specialSize = pickSpecials();
-	
-    for (var i = 0; i < numGood; i++) {
-        addToGood(eventArr[i]);
+function pickTodaysBrain(index) {
+    var eventArr = pickRandom(4,brain);
+    if(index>=5){
+        for (var i = 0; i < 2; i++) {
+            addToGood(eventArr[i]);
+        }
+    }else if(index>2){
+        addToGood(eventArr[0]);
+        addToBad(eventArr[1]);
+    }else{
+        for (var i = 0; i < 2; i++) {
+            addToBad(eventArr[i]);
+        }
+    }
+    var n = random(iday+6,91) % 4;
+    switch (n){
+        case 0:
+            break;
+        case 1:
+            addToBad(eventArr[2]);
+            break;
+        case 2:
+            addToGood(eventArr[3]);
+            break;
+        default:
+            break;
     }
 	
-    for (var i = 0; i < numBad; i++) {
-        addToBad(eventArr[numGood + i]);
+}
+function pickTodaysLuck(index) {
+    var eventArr = pickRandom(4,luck);
+    if(index>=5){
+        for (var i = 0; i < 2; i++) {
+            addToGood(eventArr[i]);
+        }
+    }else if(index>2){
+        addToGood(eventArr[0]);
+        addToBad(eventArr[1]);
+    }else{
+        for (var i = 0; i < 2; i++) {
+            addToBad(eventArr[i]);
+        }
     }
-	
+    var n = random(iday+6,91) % 4;
+    switch (n){
+        case 0:
+            break;
+        case 1:
+            addToBad(eventArr[2]);
+            break;
+        case 2:
+            addToGood(eventArr[3]);
+            break;
+        default:
+            break;
+    }
 	
 }
 
@@ -307,13 +348,17 @@ function pickAstroIndex(astro){ //astro is a number refer to the output of getAs
     result[1] = randomAstro(iday,astro,4) % 10;
     if(result[0] > 5){
         result[2] = 5;
+    }else{
+        result[2]=result[0];
     }
     if(result[1] > 5){
         result[3] =5 ;
+    }else{
+        result[3]=result[1];
     }
     return result;
 }
-
+/*
 // 添加预定义事件
 function pickSpecials() {
     var specialSize = [0,0];
@@ -340,16 +385,16 @@ function pickSpecials() {
 	
     return specialSize;
 }
-
+*/
 // 从 activities 中随机挑选 size 个
-function pickRandom(size) {
+function pickRandom(size,type) {
     var result = [];
 	
-    for (var i = 0; i < activities.length; i++) {
-        result.push(parse(activities[i]));
+    for (var i = 0; i < type.length; i++) {
+        result.push(parse(type[i]));
     }
 	
-    for (var j = 0; j < activities.length - size; j++) {
+    for (var j = 0; j < type.length - size; j++) {
         var index = random(iday, j) % result.length;
         result.splice(index, 1);
     }
@@ -382,45 +427,80 @@ function parse(event) {
 
 // 添加到“宜”
 function addToGood(event) {
-    $('.good .content ul').append('<li><div class="name">' + event.name + '</div><div class="description">' + event.good + '</div></li>');
+    $('.good').append('<li><div class="name">今天适合' + event.name + '，' + event.good + '</div></li>');
 }
 
 // 添加到“不宜”
 function addToBad(event) {
-    $('.bad .content ul').append('<li><div class="name">' + event.name + '</div><div class="description">' + event.bad + '</div></li>');
+    $('.bad').append('<li><div class="name">今天不适合' + event.name + '，' + event.bad + '</div></li>');
 }
 
 $(function(){
     $('.date').html(getTodayString());
-    
+
     if (!window.localStorage.getItem("userAstro")){
         $('#astros').html(showAstros());
         $('ul#astros li a').click( function(){
             myAstro = $(this).data('astro');
             var astroIndex = pickAstroIndex(myAstro);
-            $('.astro').html(astros[myAstro] + '今日脑力指数：' + astroIndex[0] + '/5 今日体力指数：' + astroIndex[1] + '/5');
+            $('.astro').html(astros[myAstro] + '今日脑力指数：' + astroIndex[2] + '/5 今日体力指数：' + astroIndex[3] + '/5');
             window.localStorage.setItem("userAstro", myAstro);
         });
         
     }else{
         myAstro = window.localStorage.getItem("userAstro");
         var astroIndex = pickAstroIndex(myAstro);
-        $('.astro').html(astros[myAstro] + '今日脑力指数：' + astroIndex[0] + '/5 今日幸运指数：' + astroIndex[1] + '/5');
+        $('.astro').html(astros[myAstro] + '今日脑力指数：' + astroIndex[2] + '/5 今日幸运指数：' + astroIndex[3] + '/5');
     }
     
     
     $('.direction_value').html(directions[random(iday, 2) % directions.length]);
     $('.drink_value').html(drinks[random(iday, 5) % drinks.length]);
-    pickTodaysLuck();
+    //pickTodaysLuck();
+    createAstroLuck();
 });
 
+
+function createAstroLuck(){
+    var astroIndex = pickAstroIndex(myAstro);
+    var a = astroIndex[0];
+    var b = astroIndex[1];
+    if (a+b>=10){
+        if(a+b>=18 & a>8 & b>8){
+            $('.best').html('牛逼的人生不需要解释，今天你所向无敌。唯一要注意的是对待与你一样强势的同事，选择与他们合作会开创你一生的霸业。');
+        }
+        else if(a+b>=12 & a>5 & b>5){
+            $('.best').html('今天你的状态极佳，任何技术问题都不在话下，但是请留意身边的小人，虽然今天的你不会被抓到任何把柄，但是太招摇会引来妒忌。');
+        }
+        else if(a+b>=10 & a>4 & b>4){
+            $('.best').html('对你来说今天会是精彩的一天！工作对你来说是轻松加愉快，是时候考虑一下关心一下你的TA了,今天表白或者求婚都会有好运哦！');
+        }
+        else{ 
+            pickTodaysBrain(astroIndex[2]); 
+            pickTodaysLuck(astroIndex[3]);
+        }
+    }else if( a+b>2 ){
+        pickTodaysBrain(astroIndex[2]); 
+        pickTodaysLuck(astroIndex[3]);
+    }else{
+        if(a+b==2){
+            $('.worst').html('今天不要勉强自己，累了就赶快去休息。');
+        }
+        else if(a+b==1){
+            $('.worst').html('你今天不在工作状态，可以的话少写代码吧！');
+        }
+        else{
+            $('.worst').html('嗯！如果你信我的话今天最好不要出门，当然我说的也不一定准...');
+        }
+    }
+}
 /*
- *a为astroIndex[2]脑力指数实际值，b为astroIndex[3]幸运指数实际值
+ *a为astroIndex[0]脑力指数实际值，b为astroIndex[1]幸运指数实际值
  *--------a+b>=10----------
  *case a + b >=18 & |a - b| <=1 牛逼的人生不需要解释，今天你所向无敌。唯一要注意的是对待与你一样强势的同事，选择与他们合作会开创你一生的霸业。
  *case 18>a+b>=12 & a>5 & b>5 今天你的状态极佳，任何技术问题都不在话下，但是请留意身边的小人，虽然今天的你不会被抓到任何把柄，但是太招摇会引来妒忌。
  *case 12>a+b>=10 & a>4 & b>4 对你来说今天会是精彩的一天！工作对你来说是轻松加愉快，是时候考虑一下关心一下你的TA了,今天表白或者求婚都会有好运哦！
- *case other 使用index[0]和[1]查询good 和 bad
+ *case other 使用index[2]和[3]查询good 和 bad
  *--------end a+b>=10------
  *
  *-----------2<a+b<10-----------
