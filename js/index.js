@@ -285,7 +285,7 @@ function getAstro(m,d){   //有用说法现在应该用"102123444543"
 
 // 生成今日运势
 function pickTodaysBrain(index) {
-    var eventArr = pickRandom(index+2,brain);
+    var eventArr = pickRandom(index+4,brain);
     if(index>=5){
         for (var i = 0; i < 2; i++) {
             addToGood(eventArr[i]);
@@ -298,15 +298,15 @@ function pickTodaysBrain(index) {
             addToBad(eventArr[i]);
         }
     }
-    var n = random(iday+6,47) % 4;
+    var n = random(iday+6,47) % 13;
     switch (n){
         case 0:
             break;
         case 1:
-            addToBad(eventArr[2]);
+            addToBad(eventArr[3]);
             break;
         case 2:
-            addToGood(eventArr[3]);
+            addToGood(eventArr[4]);
             break;
         default:
             break;
@@ -314,7 +314,7 @@ function pickTodaysBrain(index) {
 	
 }
 function pickTodaysLuck(index) {
-    var eventArr = pickRandom(index+2,luck);
+    var eventArr = pickRandom(index+4,luck);
     if(index>=5){
         for (var i = 0; i < 2; i++) {
             addToGood(eventArr[i]);
@@ -327,15 +327,15 @@ function pickTodaysLuck(index) {
             addToBad(eventArr[i]);
         }
     }
-    var n = random(iday+6,91) % 4;
+    var n = random(iday+6,91) % 7;
     switch (n){
         case 0:
             break;
         case 1:
-            addToBad(eventArr[2]);
+            addToBad(eventArr[3]);
             break;
         case 2:
-            addToGood(eventArr[3]);
+            addToGood(eventArr[4]);
             break;
         default:
             break;
@@ -443,7 +443,7 @@ $(function(){
     $('button').click(function(){
         $('#astros-list').show();
         $(this).hide();
-    });
+    });    
     $('ul#astros li a').click( function(){
         clearContent();
         $('#astros-list').hide();
@@ -453,7 +453,7 @@ $(function(){
         createAstroLuck();
         $('button').show();
         window.localStorage.setItem("userAstro", myAstro);
-    });
+    }); 
     if (!window.localStorage.getItem("userAstro")){
         $('button').hide();
         $('#astros-list').show();
